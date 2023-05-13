@@ -1,5 +1,12 @@
-import { afterAll, afterEach, beforeAll, describe, it } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+} from '@jest/globals';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { faker } from '@faker-js/faker';
@@ -27,6 +34,22 @@ describe('HomePageRegisterForm', () => {
   afterAll(() => server.close());
 
   it('should create POST request to /message-books on back end if inputs are valid after submitting form', async () => {
+    let expectedRequestBody = {
+      name: faker.person.fullName(),
+    };
+    let actualRequestBody: object;
+
+    server.use(
+      rest.post('/message-books', (_, res, ctx) =>
+        res(
+          ctx.json({
+            success: false,
+            message: 'Failed to create new message book',
+          }),
+        ),
+      ),
+    );
+
     render(<HomePageRegisterForm />);
 
     const nameInputElement = screen.getByLabelText(/name/i);
@@ -38,6 +61,8 @@ describe('HomePageRegisterForm', () => {
       },
     });
     fireEvent.click(registerButtonElement);
+
+    await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
   });
 
   it('should show error message if POST request failed', async () => {
