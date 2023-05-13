@@ -54,6 +54,7 @@ describe('HomePageRegisterForm', () => {
     });
     fireEvent.click(registerButtonElement);
     expect(registerButtonElement).toBeDisabled();
+    expect(nameInputElement).toBeDisabled();
 
     await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
   });
