@@ -8,6 +8,7 @@ importers:
   front-end:
     specifiers:
       '@faker-js/faker': ^8.0.0
+      '@hookform/resolvers': ^3.1.0
       '@jest/globals': ^29.5.0
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^14.0.0
@@ -25,9 +26,12 @@ importers:
       postcss: 8.4.23
       react: 18.2.0
       react-dom: 18.2.0
+      react-hook-form: ^7.43.9
       tailwindcss: 3.3.2
       typescript: 5.0.4
+      zod: ^3.21.4
     dependencies:
+      '@hookform/resolvers': 3.1.0_react-hook-form@7.43.9
       '@types/node': 20.1.3
       '@types/react': 18.2.6
       '@types/react-dom': 18.2.4
@@ -39,8 +43,10 @@ importers:
       postcss: 8.4.23
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.43.9_react@18.2.0
       tailwindcss: 3.3.2
       typescript: 5.0.4
+      zod: 3.21.4
     devDependencies:
       '@faker-js/faker': 8.0.0
       '@jest/globals': 29.5.0
@@ -449,6 +455,14 @@ packages:
     resolution: {integrity: sha512-XDR8sApuf78GHx8mLXl3KL/q7eB52A963UGejVbdbj3OZtfGlNwp0J78b7apVzqRi0GF8l9g3eSkkaL2UmU9Aw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
+
+  /@hookform/resolvers/3.1.0_react-hook-form@7.43.9:
+    resolution: {integrity: sha512-z0A8K+Nxq+f83Whm/ajlwE6VtQlp/yPHZnXw7XWVPIGm1Vx0QV8KThU3BpbBRfAZ7/dYqCKKBNnQh85BkmBKkA==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.43.9_react@18.2.0
+    dev: false
 
   /@humanwhocodes/config-array/0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
@@ -4392,6 +4406,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+
+  /react-hook-form/7.43.9_react@18.2.0:
+    resolution: {integrity: sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
