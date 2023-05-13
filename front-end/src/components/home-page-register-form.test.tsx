@@ -1,11 +1,3 @@
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
@@ -40,7 +32,7 @@ describe('HomePageRegisterForm', () => {
     let actualRequestBody: object;
 
     server.use(
-      rest.post('/message-books', (_, res, ctx) =>
+      rest.post('/api/message-books', (_, res, ctx) =>
         res(
           ctx.json({
             success: false,
@@ -61,13 +53,14 @@ describe('HomePageRegisterForm', () => {
       },
     });
     fireEvent.click(registerButtonElement);
+    expect(registerButtonElement).toBeDisabled();
 
     await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
   });
 
   it('should show error message if POST request failed', async () => {
     server.use(
-      rest.post('/message-books', (_, res, ctx) =>
+      rest.post('/api/message-books', (_, res, ctx) =>
         res(
           ctx.json({
             success: false,
