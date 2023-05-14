@@ -24,13 +24,10 @@ export function HomePageRegisterForm() {
         body: JSON.stringify(data),
       });
       const responseBody = await response.json();
-      console.log('response.ok: ', response.ok);
       if (!response.ok) throw new Error(responseBody.message);
     } catch (error) {
-      console.log('bebek goreng');
-      console.log('error instanceof Error', error instanceof Error);
-
       if (error instanceof Error) {
+        console.error(error.message);
         setIsError(true);
         setErrorMessage(error.message);
       }
@@ -38,8 +35,6 @@ export function HomePageRegisterForm() {
       setIsLoading(false);
     }
   };
-
-  console.log({ isError });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
