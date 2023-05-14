@@ -57,6 +57,7 @@ describe('HomePageRegisterForm', () => {
     server.use(
       rest.post('/api/message-books', (_, res, ctx) =>
         res(
+          ctx.status(500),
           ctx.json({
             success: false,
             message: 'Failed to create new message book',
