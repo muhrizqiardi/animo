@@ -7,3 +7,11 @@ export const messageBookEntitySchema = z.object({
 });
 export interface MessageBookEntity
   extends z.infer<typeof messageBookEntitySchema> {}
+
+export const responseEntitySchema = z.object({
+  id: z.string(),
+  messageBookId: z.string(),
+  content: z.string(),
+});
+export interface MessageBookEntity
+  extends z.infer<typeof responseEntitySchema> {}
