@@ -7,6 +7,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 export function MessageBookDetailPageSendResponseForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [messageIsSent, setMessageIsSent] = useState(false);
   const { register, handleSubmit } = useForm<CreateResponseDto>({
     resolver: zodResolver(createResponseDtoSchema),
@@ -23,7 +25,11 @@ export function MessageBookDetailPageSendResponseForm() {
       if (!response.ok) throw new Error(responseBody.message);
       setMessageIsSent(true);
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        console.error(error);
+        setIsError(true);
+        setErrorMessage(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -35,6 +41,13 @@ export function MessageBookDetailPageSendResponseForm() {
         <label htmlFor="content">Content</label>
         <textarea id="content" disabled={isLoading} {...register('content')} />
         <button disabled={isLoading}>Send</button>
+        {isError ? (
+          <p>
+            {errorMessage !== undefined
+              ? errorMessage
+              : 'Failed to send response'}
+          </p>
+        ) : null}
       </form>
     );
 
