@@ -4,8 +4,13 @@ import { setupServer } from 'msw/node';
 import { faker } from '@faker-js/faker';
 import { HomePageRegisterForm } from './home-page-register-form';
 import { RegisterNewMessageFormDto } from '@/dtos';
+import { useRouter } from 'next/navigation';
 
 const server = setupServer();
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('HomePageRegisterForm', () => {
   beforeAll(() => server.listen());
@@ -13,6 +18,12 @@ describe('HomePageRegisterForm', () => {
   afterAll(() => server.close());
 
   it('should create POST request to /message-books on back end if inputs are valid after submitting form', async () => {
+    const mockPush = jest.fn();
+    const mockRouter = {
+      push: mockPush,
+    };
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
     let expectedRequestBody: RegisterNewMessageFormDto = {
       name: faker.person.fullName(),
     };
@@ -51,6 +62,7 @@ describe('HomePageRegisterForm', () => {
     await waitFor(() => expect(nameInputElement).toBeDisabled());
 
     await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
+    expect(mockPush).toBeCalled();
   });
 
   it('should show error message if POST request failed', async () => {
