@@ -53,5 +53,33 @@ describe('MessageBookDetailPageSendResponseForm', () => {
     await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
     await screen.findByText(/your message has been sent/i);
   });
-  it.todo('should show error message if POST request failed');
+  it('should show error message if POST request failed', async () => {
+    let expectedRequestBody: CreateResponseDto = {
+      content: faker.person.fullName(),
+    };
+    const mockErrorResponse = {
+      success: true,
+      message: 'Failed to send response',
+    };
+    server.use(
+      rest.post('/api/responses', async (req, res, ctx) => {
+        return res(ctx.json(mockErrorResponse));
+      }),
+    );
+
+    render(<MessageBookDetailPageSendResponseForm />);
+
+    const contentTextareaElement = screen.getByLabelText(/content/i);
+    const sendButtonElement = screen.getByText(/send/i);
+
+    fireEvent.change(contentTextareaElement, {
+      target: {
+        value: expectedRequestBody.content,
+      },
+    });
+    fireEvent.click(sendButtonElement);
+    await waitFor(() => expect(sendButtonElement).toBeDisabled());
+    await waitFor(() => expect(contentTextareaElement).toBeDisabled());
+    await screen.findByText(/failed to send response/i);
+  });
 });
