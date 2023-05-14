@@ -62,9 +62,9 @@ describe('MessageBookDetailPageSendResponseForm', () => {
       message: 'Failed to send response',
     };
     server.use(
-      rest.post('/api/responses', async (req, res, ctx) => {
-        return res(ctx.json(mockErrorResponse));
-      }),
+      rest.post('/api/responses', async (req, res, ctx) =>
+        res(ctx.status(500), ctx.json(mockErrorResponse)),
+      ),
     );
 
     render(<MessageBookDetailPageSendResponseForm />);
