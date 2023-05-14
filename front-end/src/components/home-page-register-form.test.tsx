@@ -18,32 +18,31 @@ describe('HomePageRegisterForm', () => {
   afterAll(() => server.close());
 
   it('should create POST request to /message-books on back end if inputs are valid after submitting form', async () => {
+    // mock router
     const mockPush = jest.fn();
     const mockRouter = {
       push: mockPush,
     };
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
 
+    // msw mock API response
     let expectedRequestBody: RegisterNewMessageFormDto = {
       name: faker.person.fullName(),
     };
     let actualRequestBody: object;
-
+    const mockSuccessResponse = {
+      success: true,
+      message: 'Successfully added a new message book',
+      data: {
+        id: faker.string.uuid(),
+        slug: faker.lorem.slug(),
+        name: faker.person.fullName(),
+      },
+    };
     server.use(
       rest.post('/api/message-books', async (req, res, ctx) => {
         actualRequestBody = await req.json();
-
-        return res(
-          ctx.json({
-            success: true,
-            message: 'Successfully added a new message book',
-            data: {
-              id: faker.string.uuid(),
-              slug: faker.lorem.slug(),
-              name: faker.person.fullName(),
-            },
-          }),
-        );
+        return res(ctx.json(mockSuccessResponse));
       }),
     );
 
@@ -62,7 +61,7 @@ describe('HomePageRegisterForm', () => {
     await waitFor(() => expect(nameInputElement).toBeDisabled());
 
     await waitFor(() => expect(actualRequestBody).toEqual(expectedRequestBody));
-    expect(mockPush).toBeCalled();
+    expect(mockPush).toHaveBeenCalledWith(`/${mockSuccessResponse.data.slug}`);
   });
 
   it('should show error message if POST request failed', async () => {
