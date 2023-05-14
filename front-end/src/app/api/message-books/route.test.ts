@@ -83,4 +83,24 @@ describe('POST /api/message-books', () => {
     );
     expect(actualEndpointResponse).toEqual(expectedFrontendResponse);
   });
+  it('should return error if request body is invalid', async () => {
+    // define the incoming request object that contains invalid body
+    const mockIncomingRequestBody = {};
+    const mockIncomingRequest = new Request('/message-books', {
+      body: JSON.stringify(mockIncomingRequestBody),
+      method: 'POST',
+    });
+
+    const expectedFrontendResponseBody = {
+      success: false,
+      message: 'Invalid request: property `name` is required',
+    };
+    const expectedFrontendResponse = new Response(
+      JSON.stringify(expectedFrontendResponseBody),
+    );
+
+    // call the handler
+    const actualEndpointResponse = await POST(mockIncomingRequest);
+    expect(actualEndpointResponse).toEqual(expectedFrontendResponse);
+  });
 });
