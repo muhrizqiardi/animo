@@ -1,14 +1,18 @@
 'use client';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
+import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   RegisterNewMessageFormDto,
   registerNewMessageFormDtoSchema,
 } from '@/dtos';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { messageBookEntitySchema } from '@/entities';
 
 export function HomePageRegisterForm() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -25,6 +29,16 @@ export function HomePageRegisterForm() {
       });
       const responseBody = await response.json();
       if (!response.ok) throw new Error(responseBody.message);
+
+      const newMessageBook = z
+        .object({
+          success: z.boolean(),
+          message: z.string(),
+          data: messageBookEntitySchema,
+        })
+        .parse(responseBody).data;
+
+      router.push(`/${newMessageBook.slug}`);
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
