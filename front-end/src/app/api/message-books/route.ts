@@ -43,5 +43,15 @@ export async function POST(request: Request) {
         'Set-Cookies': `token=${newMessageBook.data.token}; HttpOnly`,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error(error.flatten());
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: 'Invalid request: property `name` is required',
+        }),
+      );
+    }
+  }
 }
