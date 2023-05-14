@@ -5,3 +5,9 @@ export const registerNewMessageFormDtoSchema = z.object({
 });
 export interface RegisterNewMessageFormDto
   extends z.infer<typeof registerNewMessageFormDtoSchema> {}
+
+export const createResponseDtoSchema = z.object({
+  content: z.string(),
+});
+export interface CreateResponseDto
+  extends z.infer<typeof createResponseDtoSchema> {}
