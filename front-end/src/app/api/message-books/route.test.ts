@@ -75,8 +75,6 @@ describe('POST /api/message-books', () => {
       },
     );
 
-    console.log({ mockMessageBook });
-
     // call the handler
     const actualEndpointResponse = await POST(mockIncomingRequest);
 
