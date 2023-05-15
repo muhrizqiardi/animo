@@ -16,7 +16,7 @@ describe('MessageBookDetailPageSendResponseForm', () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-  it('should hit POST /api/responses and show success prompt when form is submitted and inputs are valid', async () => {
+  it('should hit POST /api/message-books/:messageBookId/responses and show success prompt when form is submitted and inputs are valid', async () => {
     let expectedRequestBody: CreateResponseDto = {
       content: faker.person.fullName(),
     };
@@ -30,14 +30,22 @@ describe('MessageBookDetailPageSendResponseForm', () => {
         content: faker.lorem.paragraph(),
       },
     };
+    const mockMessageBookId = faker.string.uuid();
     server.use(
-      rest.post('/api/responses', async (req, res, ctx) => {
-        actualRequestBody = await req.json();
-        return res(ctx.json(mockSuccessResponse));
-      }),
+      rest.post(
+        `/api/message-books/${mockMessageBookId}/responses`,
+        async (req, res, ctx) => {
+          actualRequestBody = await req.json();
+          return res(ctx.json(mockSuccessResponse));
+        },
+      ),
     );
 
-    render(<MessageBookDetailPageSendResponseForm />);
+    render(
+      <MessageBookDetailPageSendResponseForm
+        messageBookId={mockMessageBookId}
+      />,
+    );
 
     const contentTextareaElement = screen.getByLabelText(/content/i);
     const sendButtonElement = screen.getByText(/send/i);
@@ -62,8 +70,10 @@ describe('MessageBookDetailPageSendResponseForm', () => {
       message: 'Failed to send response',
     };
     server.use(
-      rest.post('/api/responses', async (req, res, ctx) =>
-        res(ctx.status(500), ctx.json(mockErrorResponse)),
+      rest.post(
+        '/api/message-books/:messageBookId/responses',
+        async (req, res, ctx) =>
+          res(ctx.status(500), ctx.json(mockErrorResponse)),
       ),
     );
 
