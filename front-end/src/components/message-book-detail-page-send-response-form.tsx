@@ -5,7 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-export function MessageBookDetailPageSendResponseForm() {
+export function MessageBookDetailPageSendResponseForm(props: {
+  messageBookId: string;
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -17,10 +19,13 @@ export function MessageBookDetailPageSendResponseForm() {
   const onSubmit: SubmitHandler<CreateResponseDto> = async (data) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/responses', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `/api/message-books/${props.messageBookId}/responses`,
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+        },
+      );
       const responseBody = await response.json();
       if (!response.ok) throw new Error(responseBody.message);
       setMessageIsSent(true);
