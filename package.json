@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "frontend:test:watch": "pnpm -F front-end exec jest --watchAll --verbose true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
